@@ -4,7 +4,7 @@ import type { PredictedController } from "../types/api";
 import "./AtcAheadScreen.css";
 
 export default function AtcAheadScreen() {
-  const { data: atc, loading } = usePolling(() => api.atcAhead(), 15000);
+  const { data: atc, loading, error, unauthorized } = usePolling(() => api.atcAhead(), 15000);
 
   return (
     <div className="screen atc-screen">
@@ -14,6 +14,20 @@ export default function AtcAheadScreen() {
       </header>
 
       {loading && !atc && <p className="dim">Loading VATSIM data…</p>}
+
+      {unauthorized && (
+        <div className="empty-state">
+          <p>Your session has expired.</p>
+          <p className="dim">Please log in again to see ATC ahead.</p>
+        </div>
+      )}
+
+      {!unauthorized && error && (
+        <div className="empty-state">
+          <p>Couldn't load ATC data.</p>
+          <p className="dim">{error.message}</p>
+        </div>
+      )}
 
       {atc && !atc.current && atc.upcoming.length === 0 && (
         <div className="empty-state">

@@ -46,7 +46,11 @@ def project_route_ahead(lat: float, lon: float, heading_deg: float, groundspeed_
     is clearly a projection, not real route data, and is only used for nearby-sector
     prediction, not displayed as the filed route."""
     if groundspeed_kt <= 0:
-        return [(lat, lon)]
+        # Aircraft not moving (on ground, just spawned, etc.) — still return a
+        # 2-point "route" so downstream geometry (LineString) never breaks on
+        # a single-point list. Both points are the same place, which is
+        # correct: there's nowhere else to project to yet.
+        return [(lat, lon), (lat, lon)]
     points = [(lat, lon)]
     steps = max(1, minutes // step_minutes)
     dist_per_step = groundspeed_kt * (step_minutes / 60)

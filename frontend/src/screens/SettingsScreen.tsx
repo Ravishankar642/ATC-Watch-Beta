@@ -181,7 +181,12 @@ export default function SettingsScreen() {
 
       <section className="settings-card">
         <h2>Notifications</h2>
-        {!pushSupported() && <p className="dim">Push notifications aren't supported in this browser.</p>}
+        {!pushSupported() && showInstallInstructions && (
+          <p className="dim">Install ATC Watch Beta to your Home Screen (above) to enable notifications — iOS only allows push alerts for installed apps.</p>
+        )}
+        {!pushSupported() && !showInstallInstructions && (
+          <p className="dim">Push notifications aren't supported in this browser.</p>
+        )}
         {pushSupported() && !settings?.notifications_enabled && (
           <>
             <p className="dim">Get alerted when ATC comes online ahead of your route — even when the app is closed.</p>

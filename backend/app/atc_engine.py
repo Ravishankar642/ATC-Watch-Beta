@@ -103,6 +103,12 @@ def _entry_point(route_points: list[tuple[float, float]], polygon) -> tuple[floa
     if polygon.covers(Point(route_points[0][1], route_points[0][0])):
         return route_points[0]
 
+    # A degenerate route (aircraft stationary, e.g. groundspeed 0) has no
+    # forward projection. If the current position isn't inside the boundary
+    # (handled above), there's no meaningful entry point to compute.
+    if len(route_points) < 2 or route_points[0] == route_points[-1]:
+        return None
+
     line = LineString([(lon, lat) for lat, lon in route_points])
     intersection = line.intersection(polygon.boundary)
 

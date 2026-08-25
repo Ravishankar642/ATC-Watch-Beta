@@ -8,6 +8,7 @@ from app.database import get_db
 from app.deps import get_current_user
 from app.flight_resolver import get_tracked_callsign, resolve_pilot
 from app.models import User
+from app.route_resolver import resolve_route_endpoints
 from app.schemas import AtcAheadOut, PredictedControllerOut
 from app.vatsim_client import vatsim_client
 from app.vatspy_data import vatspy_boundaries
@@ -27,10 +28,21 @@ async def atc_ahead(user: User = Depends(get_current_user), db: AsyncSession = D
 
     await vatspy_boundaries.load()
 
-    # The VATSIM feed only exposes filed fixes and airways as text.  Until
-    # navdata is available, use a heading-based projection rather than imply
-    # that a straight line to an endpoint is the filed route.
-    route_points: list[tuple[float, float]] = []
+    # The VATSIM feed only exposes filed fixes and airways as text, so we
+    # can't resolve a full filed route without a navdata source. What we CAN
+    # resolve cheaply is the departure/arrival endpoints from the bundled
+    # airport table — include the aircraft's current position plus those
+    # real endpoints as a coarse route so FIR-intersection prediction has
+    # more to go on than pure heading projection. If neither endpoint
+    # resolves, predict_relevant_controllers() falls back to
+    # project_route_ahead() (heading-based) automatically.
+    flight_plan = pilot.get("flight_plan")
+    flight_plan = flight_plan if isinstance(flight_plan, dict) else {}
+    route_points: list[tuple[float, float]] = [(pilot["latitude"], pilot["longitude"])]
+    route_points += resolve_route_endpoints(
+        flight_plan.get("departure"),
+        flight_plan.get("arrival"),
+    )
 
     predictions = predict_relevant_controllers(
         pilot=pilot,
