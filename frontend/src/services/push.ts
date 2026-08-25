@@ -25,16 +25,7 @@ export function isAndroid(): boolean {
 }
 
 export function pushSupported(): boolean {
-  const hasApis = "serviceWorker" in navigator && "PushManager" in window && "Notification" in window;
-  if (!hasApis) return false;
-  // iOS Safari (16.4+) reports these APIs as present even in a regular
-  // browser tab, but Notification.requestPermission()/pushManager.subscribe()
-  // only actually work once the page has been added to the Home Screen and
-  // is running standalone. Outside that context, iOS silently blocks the
-  // subscription instead of throwing something callers can act on cleanly —
-  // so treat "iOS but not installed" as unsupported up front.
-  if (isIos() && !isStandalonePwa()) return false;
-  return true;
+  return "serviceWorker" in navigator && "PushManager" in window && "Notification" in window;
 }
 
 /**

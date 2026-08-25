@@ -172,21 +172,9 @@ export default function SettingsScreen() {
         </section>
       )}
 
-      {isIos() && (
-        <section className="settings-card">
-          <h2>iPhone Lock Screen</h2>
-          <p className="dim">When the installed app’s notifications are enabled, ATC alerts appear on the Lock Screen. iPhone Live Activities are native-app-only, so a web app cannot keep a continuously updating flight card there.</p>
-        </section>
-      )}
-
       <section className="settings-card">
         <h2>Notifications</h2>
-        {!pushSupported() && showInstallInstructions && (
-          <p className="dim">Install ATC Watch Beta to your Home Screen (above) to enable notifications — iOS only allows push alerts for installed apps.</p>
-        )}
-        {!pushSupported() && !showInstallInstructions && (
-          <p className="dim">Push notifications aren't supported in this browser.</p>
-        )}
+        {!pushSupported() && <p className="dim">Push notifications aren't supported in this browser.</p>}
         {pushSupported() && !settings?.notifications_enabled && (
           <>
             <p className="dim">Get alerted when ATC comes online ahead of your route — even when the app is closed.</p>
