@@ -1,5 +1,7 @@
 from datetime import datetime, timezone
 
+import logging
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -12,6 +14,8 @@ from app.route_resolver import resolve_route_endpoints
 from app.schemas import AtcAheadOut, PredictedControllerOut
 from app.vatsim_client import vatsim_client
 from app.vatspy_data import vatspy_boundaries
+
+logger = logging.getLogger("vatsim.routers.atc")
 
 router = APIRouter(prefix="/api/atc", tags=["atc"])
 
@@ -30,25 +34,29 @@ async def atc_ahead(user: User = Depends(get_current_user), db: AsyncSession = D
 
     # The VATSIM feed only exposes filed fixes and airways as text, so we
     # can't resolve a full filed route without a navdata source. What we CAN
-    # resolve cheaply is the departure/arrival endpoints from the bundled
-    # airport table — include the aircraft's current position plus those
-    # real endpoints as a coarse route so FIR-intersection prediction has
-    # more to go on than pure heading projection. If neither endpoint
-    # resolves, predict_relevant_controllers() falls back to
-    # project_route_ahead() (heading-based) automatically.
+    # resolve cheaply is the arrival airport from the bundled airport table —
+    # use current position -> arrival as a coarse straight-line "route ahead"
+    # for FIR-intersection prediction. Departure is deliberately NOT included
+    # here: for an aircraft already airborne, a route that runs back through
+    # its departure airport before continuing to the arrival isn't "ahead" of
+    # the aircraft at all, it's backwards, and produces a self-intersecting
+    # line that confuses (and can break) the intersection geometry below.
+    # If arrival doesn't resolve, predict_relevant_controllers() falls back
+    # to project_route_ahead() (heading-based) automatically.
     flight_plan = pilot.get("flight_plan")
     flight_plan = flight_plan if isinstance(flight_plan, dict) else {}
     route_points: list[tuple[float, float]] = [(pilot["latitude"], pilot["longitude"])]
-    route_points += resolve_route_endpoints(
-        flight_plan.get("departure"),
-        flight_plan.get("arrival"),
-    )
+    route_points += resolve_route_endpoints(None, flight_plan.get("arrival"))
 
-    predictions = predict_relevant_controllers(
-        pilot=pilot,
-        route_points=route_points,
-        controllers=vatsim_client.all_controllers(),
-    )
+    predictions = []
+    try:
+        predictions = predict_relevant_controllers(
+            pilot=pilot,
+            route_points=route_points,
+            controllers=vatsim_client.all_controllers(),
+        )
+    except Exception:
+        logger.exception("ATC prediction failed for callsign=%s; returning no predictions", callsign)
 
     current = next((p for p in predictions if p.is_current), None)
     upcoming = [p for p in predictions if not p.is_current]

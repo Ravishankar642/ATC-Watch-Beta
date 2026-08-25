@@ -110,6 +110,8 @@ def _entry_point(route_points: list[tuple[float, float]], polygon) -> tuple[floa
         return None
 
     line = LineString([(lon, lat) for lat, lon in route_points])
+    if not line.is_valid or line.length == 0:
+        return None
     intersection = line.intersection(polygon.boundary)
 
     def coordinates(geometry):

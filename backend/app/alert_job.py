@@ -18,6 +18,7 @@ from app.database import AsyncSessionLocal
 from app.flight_resolver import resolve_pilot
 from app.models import PushSubscription, User, UserSettings
 from app.push import send_push_to_user
+from app.route_resolver import resolve_route_endpoints
 from app.vatsim_client import vatsim_client
 from app.vatspy_data import vatspy_boundaries
 
@@ -60,10 +61,13 @@ async def _evaluate_all_users() -> None:
             if not sub_check.scalars().first():
                 continue
 
-            # Filed route text cannot be resolved without navdata.  An empty
-            # path asks the engine for its documented heading-based projection
-            # rather than treating a direct line to an airport as the route.
-            route_points: list[tuple[float, float]] = []
+            # Same reasoning as atc.py: current position -> arrival only.
+            # Departure is excluded — for an airborne aircraft it's behind
+            # the aircraft, not ahead, and creates a backtracking route.
+            flight_plan = pilot.get("flight_plan")
+            flight_plan = flight_plan if isinstance(flight_plan, dict) else {}
+            route_points: list[tuple[float, float]] = [(pilot["latitude"], pilot["longitude"])]
+            route_points += resolve_route_endpoints(None, flight_plan.get("arrival"))
 
             predictions = predict_relevant_controllers(
                 pilot=pilot,

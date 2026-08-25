@@ -66,7 +66,12 @@ export default function SettingsScreen() {
       }
     } catch (err) {
       console.error("enableNotifications failed:", err);
-      setNotifError(err instanceof Error ? err.message : String(err));
+      const message = err instanceof Error ? err.message : String(err);
+      if (message.includes("503") || message.toLowerCase().includes("vapid")) {
+        setNotifError("The server isn't configured for push yet (missing VAPID keys). This is a deployment setting, not something fixable from the app — see the README's Push Notifications setup section.");
+      } else {
+        setNotifError(message);
+      }
     }
   };
 
