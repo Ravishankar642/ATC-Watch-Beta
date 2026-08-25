@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+    <title>ATC Watch Beta</title>
+    <meta name="description" content="Live VATSIM flight companion: traffic, ATC ahead, and real-time alerts." />
+
+    <!-- PWA manifest -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#0B0E14" />
+
+    <!-- iOS Home Screen / standalone support (Safari does not read manifest for these) -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="ATC Watch Beta" />
+    <link rel="apple-touch-icon" href="/icons/icon-180.png" />
+    <link rel="icon" type="image/png" href="/icons/icon-192.png" />
+
+    <link rel="preconnect" href="https://data.vatsim.net" />
+    <style>
+      html, body, #root { height: 100%; margin: 0; background: #0B0E14; }
+      body { -webkit-tap-highlight-color: transparent; overscroll-behavior-y: none; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

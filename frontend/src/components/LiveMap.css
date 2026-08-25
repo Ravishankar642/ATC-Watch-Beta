@@ -1,0 +1,29 @@
+.live-map {
+  position: absolute;
+  inset: 0;
+}
+
+.own-aircraft-marker,
+.traffic-marker {
+  cursor: pointer;
+  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.6));
+}
+
+.aircraft-marker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.aircraft-marker__label {
+  margin-top: -2px;
+  color: #f3f7ff;
+  font: 700 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  text-shadow: 0 1px 3px #000, 0 0 4px #000;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.maplibregl-ctrl-attrib {
+  font-size: 9px !important;
+}

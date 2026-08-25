@@ -1,0 +1,71 @@
+/*
+  Design direction: "glass cockpit at night."
+  A real PFD/ND (primary flight display / navigation display) is a near-black
+  panel with amber and cyan-green data readouts in a monospace/7-segment
+  feel, thin hairline dividers, and no decoration beyond what conveys state.
+  That vernacular — not a generic dark-mode SaaS palette — is where this
+  app's look comes from.
+
+  Palette:
+    --bg-void      #0B0E14  base panel background (avionics black)
+    --bg-panel     #11151C  raised panel / card
+    --bg-panel-2   #171C26  nested panel
+    --line         #232A38  hairline dividers
+    --amber        #FFB000  primary data / active ATC (PFD amber)
+    --hud-green    #59F2A5  online / good / "in range"
+    --caution      #FF5D5D  offline / warning / out of range
+    --text-primary #E8ECF4  primary readout text
+    --text-dim     #7C8699  secondary/caption text
+*/
+:root {
+  --bg-void: #0b0e14;
+  --bg-panel: #11151c;
+  --bg-panel-2: #171c26;
+  --line: #232a38;
+  --amber: #ffb000;
+  --amber-dim: #a8760a;
+  --hud-green: #59f2a5;
+  --caution: #ff5d5d;
+  --text-primary: #e8ecf4;
+  --text-dim: #7c8699;
+
+  --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", ui-monospace, monospace;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  background: var(--bg-void);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.amber-glow {
+  color: var(--amber);
+  text-shadow: 0 0 12px rgba(255, 176, 0, 0.35);
+}
+
+.green-glow {
+  color: var(--hud-green);
+  text-shadow: 0 0 10px rgba(89, 242, 165, 0.35);
+}
+
+::-webkit-scrollbar { width: 0; height: 0; }

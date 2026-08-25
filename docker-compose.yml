@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: vatsim
+      POSTGRES_PASSWORD: vatsim
+      POSTGRES_DB: vatsim_atc_watch
+    ports:
+      - "5432:5432"
+    volumes:
+      - vatsim_pg_data:/var/lib/postgresql/data
+
+volumes:
+  vatsim_pg_data:

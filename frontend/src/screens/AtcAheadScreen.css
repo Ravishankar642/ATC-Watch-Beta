@@ -1,0 +1,49 @@
+.atc-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+
+.atc-row--current {
+  border-color: var(--amber-dim);
+  background: linear-gradient(180deg, rgba(255, 176, 0, 0.06), rgba(17, 21, 28, 1));
+}
+
+.atc-row__left {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.atc-row__kind {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+}
+
+.atc-row__callsign {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.atc-row__right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.atc-row__freq {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.atc-row__eta {
+  font-size: 12.5px;
+  color: var(--hud-green);
+}

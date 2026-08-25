@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "cd frontend && npm ci",
+  "buildCommand": "cd frontend && npm run build",
+  "outputDirectory": "frontend/dist",
+  "crons": [
+    { "path": "/api/cron/alerts", "schedule": "*/1 * * * *" }
+  ],
+  "rewrites": [
+    { "source": "/atc", "destination": "/index.html" },
+    { "source": "/traffic", "destination": "/index.html" },
+    { "source": "/flight", "destination": "/index.html" },
+    { "source": "/settings", "destination": "/index.html" }
+  ]
+}

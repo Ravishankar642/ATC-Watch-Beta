@@ -1,0 +1,96 @@
+.flight-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 18px;
+}
+
+.flight-card__callsign {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.flight-card__type {
+  font-size: 13px;
+  margin-top: 2px;
+}
+
+.flight-card__route {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.flight-card__route-line {
+  flex: 1;
+  height: 1px;
+  background: repeating-linear-gradient(90deg, var(--amber-dim) 0 6px, transparent 6px 12px);
+}
+
+.route-point {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.route-point__label {
+  font-size: 9px;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+}
+
+.route-point__value {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.detail-stat {
+  background: var(--bg-panel-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.detail-stat__label {
+  font-size: 9.5px;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.detail-stat__value {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.filed-route {
+  background: var(--bg-panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+}
+
+.filed-route__label {
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+}
+
+.filed-route p {
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 6px 0 0;
+  word-break: break-word;
+}

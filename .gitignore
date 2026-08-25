@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+backend/app/data/boundaries_cache.geojson
+
+# Node
+node_modules/
+dist/
+dev-dist/
+
+# Env
+.env
+.env.production
+.env.local
+
+# OS
+.DS_Store
